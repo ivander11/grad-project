@@ -1,4 +1,16 @@
+# Virtual Environments
+.venv/
 venv/
+
+# Datasets
+dataset/
+noah's datasets/
+
+# Model Weights
+weights/
+*.pt
+
+# Temporary/IDE Files
+tempCodeRunnerFile.py
 __pycache__/
-weights/*.pt
-datasets/
+*.pyc

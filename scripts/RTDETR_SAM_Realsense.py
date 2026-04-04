@@ -6,7 +6,7 @@ from ultralytics import RTDETR
 from mobile_sam import sam_model_registry, SamPredictor
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-DETR_WEIGHTS = 'weights/best.pt'
+DETR_WEIGHTS = 'weights/best_wb_meds_marker.pt'
 SAM_WEIGHTS = 'weights/mobile_sam.pt'
 
 def run_realsense_pipeline():
@@ -56,7 +56,7 @@ def run_realsense_pipeline():
             rgb_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB)
 
             # 1. Detection
-            results = detr_model.predict(rgb_image, conf=0.9, verbose=False)
+            results = detr_model.predict(rgb_image, conf=0.8, verbose=False)
             
             if len(results[0].boxes) > 0:
                 # Set SAM image once for all predictions
