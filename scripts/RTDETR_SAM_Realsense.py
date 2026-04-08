@@ -6,7 +6,7 @@ from ultralytics import RTDETR
 from mobile_sam import sam_model_registry, SamPredictor
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-DETR_WEIGHTS = 'weights/best_rmm.pt'
+DETR_WEIGHTS = 'weights/best_wb_meds_marker.pt'
 SAM_WEIGHTS = 'weights/mobile_sam.pt'
 
 

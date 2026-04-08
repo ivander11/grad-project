@@ -2,20 +2,32 @@
 venv/
 env/
 .env
+.venv/
 
 # Data and Models
 datasets/
+dataset/
+noah's datasets/
 weights/
+*.pt
 
-# Python Cache
+# Training Runs and Archives
+runs-*/
+*.zip
+
+# Python Cache & Temp Files
 __pycache__/
 *.py[cod]
+tempCodeRunnerFile.py
 
 # Jupyter Notebooks
 .ipynb_checkpoints/
 
-# Submodules or external repos (if not tracked by this git)
-# RT-DETR/  <-- Uncomment this if RT-DETR is an independent clone you do not want to track
+# Unmerged/Untracked Local Code
+DDPG Code/
+
+# Submodules or external repos
+RT-DETR/
 
 # OS generated files
 .DS_Store
