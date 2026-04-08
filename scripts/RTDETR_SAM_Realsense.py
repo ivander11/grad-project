@@ -6,7 +6,7 @@ from ultralytics import RTDETR
 from mobile_sam import sam_model_registry, SamPredictor
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-DETR_WEIGHTS = 'weights/best_wb_meds_marker.pt'
+DETR_WEIGHTS = r"\\Ivander\\rl_grasping_project\\runs-20260407T121744Z-3-001\\runs\\detect\\rtdetr_runs\\train\\weights\\best.pt"
 SAM_WEIGHTS = 'weights/mobile_sam.pt'
 
 
@@ -83,8 +83,19 @@ def run_realsense_pipeline():
                     class_name = detr_model.names[class_id]
                     class_color = get_class_color(class_id)
 
+                    # Calculate center of bounding box for Point Prompt
+                    box_cx = int((x_min + x_max) / 2)
+                    box_cy = int((y_min + y_max) / 2)
+                    input_point = np.array([[box_cx, box_cy]])
+                    input_label = np.array([1]) # 1 = foreground object
+
                     # 2. Segmentation
-                    masks, _, _ = sam_predictor.predict(box=box, multimask_output=False)
+                    masks, _, _ = sam_predictor.predict(
+                        box=box, 
+                        point_coords=input_point,
+                        point_labels=input_label,
+                        multimask_output=False
+                    )
                     target_mask = masks[0]
 
                     # 3. Centroid & Depth Extraction
@@ -93,7 +104,18 @@ def run_realsense_pipeline():
                         cx = int(np.mean(x_pixels))
                         cy = int(np.mean(y_pixels))
 
-                        depth_meters = depth_frame.get_distance(cx, cy)
+                        # Extract 5x5 region around centroid for more robust depth estimation
+                        depth_region = np.asanyarray(depth_frame.get_data())[
+                            max(0, cy-2):min(480, cy+3),
+                            max(0, cx-2):min(640, cx+3)
+                        ]
+                        # Filter out zero values which indicate no depth data
+                        valid_depths = depth_region[depth_region > 0]
+                        if len(valid_depths) > 0:
+                            depth_meters = np.median(valid_depths) * depth_frame.get_units()
+                        else:
+                            continue # Skip if no valid depth data
+                        
                         depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
                         spatial_coords = rs.rs2_deproject_pixel_to_point(depth_intrin, [cx, cy], depth_meters)
                         x_m, y_m, z_m = spatial_coords[0], spatial_coords[1], spatial_coords[2]
