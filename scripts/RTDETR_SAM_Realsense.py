@@ -6,8 +6,17 @@ from ultralytics import RTDETR
 from mobile_sam import sam_model_registry, SamPredictor
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-DETR_WEIGHTS = 'weights/best_wb_meds_marker.pt'
+DETR_WEIGHTS = 'weights/best_rmm.pt'
 SAM_WEIGHTS = 'weights/mobile_sam.pt'
+
+
+def get_class_color(class_id: int):
+    """Return a deterministic BGR color for a class id."""
+    # Spread class colors across hue space for clear visual separation.
+    hue = (class_id * 37) % 180
+    hsv_color = np.uint8([[[hue, 220, 255]]])
+    bgr_color = cv2.cvtColor(hsv_color, cv2.COLOR_HSV2BGR)[0][0]
+    return int(bgr_color[0]), int(bgr_color[1]), int(bgr_color[2])
 
 def run_realsense_pipeline():
     print("Loading models into VRAM...")
@@ -56,7 +65,7 @@ def run_realsense_pipeline():
             rgb_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB)
 
             # 1. Detection
-            results = detr_model.predict(rgb_image, conf=0.8, verbose=False)
+            results = detr_model.predict(rgb_image, conf=0.5, verbose=False)
             
             if len(results[0].boxes) > 0:
                 # Set SAM image once for all predictions
@@ -72,6 +81,7 @@ def run_realsense_pipeline():
                     class_id = int(results[0].boxes.cls[i].cpu().numpy())
                     confidence = float(results[0].boxes.conf[i].cpu().numpy())
                     class_name = detr_model.names[class_id]
+                    class_color = get_class_color(class_id)
 
                     # 2. Segmentation
                     masks, _, _ = sam_predictor.predict(box=box, multimask_output=False)
@@ -90,16 +100,16 @@ def run_realsense_pipeline():
 
                         # --- VISUALIZATION ---
                         # Draw Bounding Box
-                        cv2.rectangle(color_image, (x_min, y_min), (x_max, y_max), (255, 0, 0), 2)
+                        cv2.rectangle(color_image, (x_min, y_min), (x_max, y_max), class_color, 2)
                         
                         # Draw Label and Confidence
                         label_text = f"{class_name} {confidence:.2f}"
-                        cv2.putText(color_image, label_text, (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
+                        cv2.putText(color_image, label_text, (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, class_color, 2)
                         
                         # Draw Mask
-                        green_mask = np.zeros_like(color_image, dtype=np.uint8)
-                        green_mask[target_mask] = [0, 255, 0] 
-                        color_image = cv2.addWeighted(color_image, 1.0, green_mask, 0.4, 0)
+                        class_mask = np.zeros_like(color_image, dtype=np.uint8)
+                        class_mask[target_mask] = class_color
+                        color_image = cv2.addWeighted(color_image, 1.0, class_mask, 0.4, 0)
 
                         # Draw Crosshair
                         cv2.drawMarker(color_image, (cx, cy), (0, 0, 255), markerType=cv2.MARKER_CROSS, markerSize=20, thickness=2)

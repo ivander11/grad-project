@@ -1,16 +1,22 @@
 # Virtual Environments
-.venv/
 venv/
+env/
+.env
 
-# Datasets
-dataset/
-noah's datasets/
-
-# Model Weights
+# Data and Models
+datasets/
 weights/
-*.pt
 
-# Temporary/IDE Files
-tempCodeRunnerFile.py
+# Python Cache
 __pycache__/
-*.pyc
+*.py[cod]
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Submodules or external repos (if not tracked by this git)
+# RT-DETR/  <-- Uncomment this if RT-DETR is an independent clone you do not want to track
+
+# OS generated files
+.DS_Store
+Thumbs.db
