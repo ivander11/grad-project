@@ -41,4 +41,4 @@ def extract_frames(video_path, output_dir, fps_target=2):
     print(f"Extracted {saved_count} frames from {video_name} to {output_dir}")
 
 # Usage
-# extract_frames("video1.mp4", "dataset/images", fps_target=2)
+# extract_frames("video1.mp4", "data/images", fps_target=2)

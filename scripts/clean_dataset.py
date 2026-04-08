@@ -3,7 +3,7 @@ import glob
 from pathlib import Path
 
 # 1. SETUP: Update paths
-DATASET_ROOT = r"C:\Ivander\rl_grasping_project\dataset\rt_detr_dataset\yolo_format"
+DATASET_ROOT = r"data/rt_detr_dataset/yolo_format"
 DIRS = ["train", "valid", "test"]
 THRESHOLD = 0.02  
 EXTENSIONS = [".png", ".jpg", ".jpeg"]

@@ -5,10 +5,8 @@ env/
 .venv/
 
 # Data and Models
-datasets/
-dataset/
-noah's datasets/
-weights/
+data/
+models/
 *.pt
 
 # Training Runs and Archives

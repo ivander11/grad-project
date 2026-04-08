@@ -6,8 +6,8 @@ from ultralytics import RTDETR
 from mobile_sam import sam_model_registry, SamPredictor
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-DETR_WEIGHTS = r"\\Ivander\\rl_grasping_project\\runs-20260407T121744Z-3-001\\runs\\detect\\rtdetr_runs\\train\\weights\\best.pt"
-SAM_WEIGHTS = 'weights/mobile_sam.pt'
+DETR_WEIGHTS = "models/best.pt"
+SAM_WEIGHTS = 'models/mobile_sam.pt'
 
 
 def get_class_color(class_id: int):

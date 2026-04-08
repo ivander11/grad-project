@@ -74,7 +74,7 @@ def execute_coco_split(source_dir, output_dir, train_ratio=0.70, valid_ratio=0.2
         print(f"Compiled {split_name}: {len(split_images)} images")
 
 # --- CONFIGURATION ---
-SOURCE_DIR = r'C:\Ivander\rl_grasping_project\dataset\RT_DETR Datasets.coco-mmdetection\train'
-OUTPUT_DIR = r'C:\Ivander\rl_grasping_project\dataset\rt_detr_dataset'
+SOURCE_DIR = r'data/annotation.v7-final.coco/train' # Update this path to your source directory containing the COCO dataset   
+OUTPUT_DIR = r'data/rt_detr_dataset' # Update this path to your desired output directory for the split datasets
 
 execute_coco_split(SOURCE_DIR, OUTPUT_DIR)

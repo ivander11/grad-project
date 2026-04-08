@@ -10,7 +10,7 @@ def is_blurry(image, threshold=50):
     laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
     return laplacian_var < threshold
 
-def record_dataset_frames(output_dir="dataset/marker_glue_meds", fps_target=1, blur_threshold=50):
+def record_dataset_frames(output_dir="data/marker_glue_meds", fps_target=1, blur_threshold=50):
     """Records frames from a RealSense camera, saving only those that are not blurry."""
     os.makedirs(output_dir, exist_ok=True)
     
