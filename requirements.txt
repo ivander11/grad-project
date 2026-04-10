@@ -1,0 +1,18 @@
+# Vision and Hardware
+opencv-python==4.13.0.92
+pyrealsense2==2.56.5.9235
+pillow==12.0.0
+
+# Deep Learning Frameworks (CUDA 12.1)
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+ultralytics==8.4.25
+
+# Segmentation
+mobile_sam @ git+https://github.com/ChaoningZhang/MobileSAM.git@b01a9ccef3b9e10b099b544efe004d0871802c3b
+timm==1.0.25
+
+# Data and Math
+numpy==2.3.5
+matplotlib==3.10.8
+scipy==1.17.1

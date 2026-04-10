@@ -11,6 +11,7 @@ models/
 
 # Training Runs and Archives
 runs-*/
+runs/
 *.zip
 
 # Python Cache & Temp Files
