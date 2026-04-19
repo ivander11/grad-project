@@ -11,7 +11,7 @@ from src.perception.vision import VisionPipeline
 
 def main():
     camera = RealSenseCamera()
-    vision = VisionPipeline(detr_weights="../models/best.pt", sam_weights="../models/mobile_sam.pt")
+    vision = VisionPipeline(detr_weights="../models/best_latest.pt", sam_weights="../models/mobile_sam.pt")
     
     camera.start()
     print("Pipeline active. Press 'q' to quit.")
